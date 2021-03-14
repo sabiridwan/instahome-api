@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es6", "dom"],
+    "types": ["reflect-metadata"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "removeComments": true,
+    "strict": false,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "strictFunctionTypes": false,
+    "experimentalDecorators": true
+  },
+  "exclude": ["/node_modules/"],
+  "include": ["src/**/*.ts", "src/test/environment.js"]
+}
