@@ -5,21 +5,21 @@ import container from "./inversify.config";
 
 const _service = container.get<CustomerService>(TYPES.CustomerService);
 
-const seed = async (_, {}, context: Context) => {
+const seedCustomer = async (_, {}, context: Context) => {
   return await _service.seed();
 };
 
-const findOne = async (_, model, context: Context) => {
+const findCustomer = async (_, model, context: Context) => {
   return await _service.findOne(model);
 };
 
 const resolvers = {
   Long: LongResolver,
   Query: {
-    findOne,
+    findCustomer,
   },
   Mutation: {
-    seed,
+    seedCustomer,
   },
 };
 

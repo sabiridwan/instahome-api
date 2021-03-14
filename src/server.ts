@@ -1,7 +1,6 @@
 import { setGlobalOptions } from "@typegoose/typegoose";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import Keyv from "keyv";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -11,58 +10,20 @@ import { GraphQLFormattedError } from "graphql";
 import { graphqlUploadExpress } from "graphql-upload";
 import http from "http";
 import https from "https";
-import { expressSharp, FsAdapter, S3Adapter } from "express-sharp";
 import { connect } from "mongoose";
+import path from "path";
 import { environment } from "./environment";
 import { logger } from "./helper";
-import { cacheMiddleware, publicMiddleWare } from "./midleware";
 import schema from "./schema";
-import { AccountService, TYPES } from "./services/accounts/interface";
-import container from "./services/accounts/inversify.config";
-import AWS from "aws-sdk";
-import { s3Config } from "./libs";
-import path from "path";
-import { imageMiddleware } from "./midleware/renderImage";
 const morgan = require("morgan");
 
-// (global as any).__srcdir = __dirname;
 dotenv.config();
 
-const authSvc = container.get<AccountService>(TYPES.AccountService);
-
 declare var module: any;
-const sharpAdapter = environment.isLocalFileStorage
-  ? new FsAdapter(
-      path.join(
-        path.resolve(process.env.NODE_ENV == "production" ? "../" : "."),
-        "resources"
-      )
-    )
-  : new S3Adapter(process.env.aws_bucket, new AWS.S3(s3Config.default));
 
 const origins = {
-  development: [
-    "http://localhost:3000",
-    "http://localhost:4004",
-    "http://localhost:8080",
-    "http://localhost:8081",
-  ],
-  production: [
-    "http://localhost:8080",
-    "http://localhost:8091",
-    "http://127.0.0.1:8091",
-    "http://127.0.0.1:8092",
-    "https://order-please.com",
-    "https://vendor.order-please.com",
-    "https://admin.order-please.com",
-  ],
-  orderlink: [
-    "https://localhost:8092",
-    "https://orderlink.xyz",
-    "http://134.209.162.27:8094",
-    "https://store.orderlink.xyz",
-    "https://admin.orderlink.xyz",
-  ],
+  development: ["http://localhost:3000", "http://localhost:8090"],
+  production: ["http://localhost:8090"],
   stage: [
     "https://localhost:8092",
     "https://stage.order-please.com",
@@ -149,21 +110,12 @@ const getIpAddress = (headers): string => {
 
 const app = express();
 const appContext = async (ctx: any) => {
-  // logger.info("--------------------request------------------------")
-  // logger.info(JSON.stringify(req.body), "@request variables");
-  if (ctx && ctx.headers && ctx.headers["authorization"]) {
-    const token = ctx.headers["authorization"];
-    if (!token) return;
-
-    const tk = token.split("Bearer").pop().trim();
-
+  if (ctx && ctx.headers && ctx.headers["customerId"]) {
+    const customerId = ctx.headers["customerId"];
+    if (!customerId) return;
     try {
-      const auth = await authSvc.jwtVerify(tk);
       return {
-        user: {
-          ...auth,
-          storeId: auth.store,
-        },
+        customerId,
       };
     } catch (error) {
       return {
@@ -188,21 +140,12 @@ var accessLogStream = fs.createWriteStream(
 // setup the logger
 app.use(morgan("combined", { stream: accessLogStream }));
 
-app.use(publicMiddleWare(express));
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
-app.use(
-  "/resources",
-  environment.useExpressSharp
-    ? expressSharp({
-        cache: new Keyv(),
-        imageAdapter: sharpAdapter,
-      })
-    : imageMiddleware
-);
+
 app.use(
   "/graphql",
   graphqlUploadExpress({ maxFileSize: 19000000000, maxFiles: 10 }),

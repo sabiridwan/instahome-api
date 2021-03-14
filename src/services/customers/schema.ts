@@ -18,11 +18,11 @@ const typeDefs = gql`
 
   # ---------query
   type Query {
-    findOne(page: CustomerQueryInput): Customer!
+    findCustomer(page: CustomerQueryInput): Customer!
   }
   # ---------------mutation
   type Mutation {
-    seed: Boolean
+    seedCustomer: Boolean
   }
 `;
 
