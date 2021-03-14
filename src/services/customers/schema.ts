@@ -8,8 +8,8 @@ const typeDefs = gql`
     _id: ID!
     customerId: String!
     name: String!
-    createdAt: Long!
-    updatedAt: Long!
+    createdAt: Long
+    updatedAt: Long
   }
 
   input CustomerQueryInput {
@@ -18,7 +18,7 @@ const typeDefs = gql`
 
   # ---------query
   type Query {
-    findCustomer(page: CustomerQueryInput): Customer!
+    findCustomer(customer: CustomerQueryInput): Customer!
   }
   # ---------------mutation
   type Mutation {

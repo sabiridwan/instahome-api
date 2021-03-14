@@ -9,8 +9,8 @@ const seedCustomer = async (_, {}, context: Context) => {
   return await _service.seed();
 };
 
-const findCustomer = async (_, model, context: Context) => {
-  return await _service.findOne(model);
+const findCustomer = async (_, customer, context: Context) => {
+  return await _service.findOne(customer.customer);
 };
 
 const resolvers = {
