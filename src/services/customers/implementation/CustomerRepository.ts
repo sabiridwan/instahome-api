@@ -36,6 +36,12 @@ export class CustomerRepositoryImpl implements CustomerRepository {
         updatedAt: Date.now(),
         createdAt: Date.now(),
       },
+      {
+        customerId: "singgroup",
+        name: "IGB Behard",
+        updatedAt: Date.now(),
+        createdAt: Date.now(),
+      },
     ]);
 
     return true;
