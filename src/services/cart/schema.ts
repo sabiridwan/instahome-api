@@ -4,18 +4,18 @@ import resolvers from "./resolver";
 const typeDefs = gql`
   type Cart {
     id: String!
-    items: CartItem!
+    items: [CartItem]!
     totalDiscountPrice: Float!
     totalOriginalPrice: Float!
   }
 
   type CartItem {
-    _id: String!
-    quantity: Int!
-    adsType: String!
-    originalPrice: Float!
-    discountPrice: Float!
-    totalPrice: Float!
+    _id: String
+    quantity: Int
+    adType: String
+    originalPrice: Float
+    discountPrice: Float
+    totalPrice: Float
     remark: String
   }
 

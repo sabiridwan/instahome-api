@@ -110,8 +110,8 @@ const getIpAddress = (headers): string => {
 
 const app = express();
 const appContext = async (ctx: any) => {
-  if (ctx && ctx.headers && ctx.headers["customerId"]) {
-    const customerId = ctx.headers["customerId"];
+  if (ctx && ctx.headers && ctx.headers["customerid"]) {
+    const customerId = ctx.headers["customerid"];
     if (!customerId) return;
     try {
       return {

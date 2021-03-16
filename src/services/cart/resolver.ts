@@ -5,10 +5,14 @@ import container from "./inversify.config";
 const _service = container.get<CartService>(TYPES.CartService);
 
 const createOrUpdateCart = async (_, cart, context: Context) => {
-  return await _service.createOrUpdateCart({
+  const res = await _service.createOrUpdateCart({
     ...cart.cart,
     id: context.customerId,
   });
+
+  console.log(res.items,"i am here...");
+
+  return res;
 };
 
 const findCustomerCart = async (_, __, context: Context) => {

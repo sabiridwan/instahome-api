@@ -2,15 +2,18 @@ import { inject, injectable } from "inversify";
 import { adContainer, AdService, AD_TYPES } from "../../ads";
 import { CartRepository, TYPES } from "../interface";
 import { CartService } from "../interface/CartService";
-import Cart from "../model";
+import Cart, { CartItem } from "../model";
 
 @injectable()
 export class CartServiceImpl implements CartService {
   private _repository: CartRepository;
-  private _adService: AdService= adContainer.get<AdService>(AD_TYPES.AdService);
+  private _adService: AdService = adContainer.get<AdService>(
+    AD_TYPES.AdService
+  );
 
-  constructor(@inject(TYPES.CartRepository) accountRepo: CartRepository,
-  // @inject(AD_TYPES.AdService) adSvc: AdService
+  constructor(
+    @inject(TYPES.CartRepository) accountRepo: CartRepository
+    // @inject(AD_TYPES.AdService) adSvc: AdService
   ) {
     this._repository = accountRepo;
     // this._adService = adSvc;
@@ -24,25 +27,18 @@ export class CartServiceImpl implements CartService {
   };
 
   create = async (model: Cart): Promise<Cart> => {
-
-
-    console.log(model.items);
-
-
-    for (const item of model.items) {
-      const ad = await this._adService.findOne({ id: item.adType});
-
-      console.log(ad,"ads...")
+    let items: Array<CartItem> = [];
+    for await (const item of model.items) {
+      items.push(await this._adSummary(model.id, item));
     }
 
-   
-
-    return await this._repository.create(model);
+    return { ...model, items, id: model.id };
+    // return await this._repository.create(model);
   };
 
   update = async (model: Cart): Promise<Cart> => {
     await this._repository.update(model);
-    return this.findOne({ id: model.id});
+    return this.findOne({ id: model.id });
   };
 
   find = async (query: Partial<Cart>): Promise<Array<Cart>> => {
@@ -51,5 +47,18 @@ export class CartServiceImpl implements CartService {
 
   findOne = async (query: Partial<Cart>): Promise<Cart> => {
     return await this._repository.findOne(query);
+  };
+
+  _adSummary = async (
+    customerId: string,
+    item: CartItem
+  ): Promise<CartItem> => {
+    const ad = await this._adService.findOne({ id: item.adType });
+
+    if (!ad) throw new Error("Ad not found");
+
+    item.originalPrice = item.quantity * ad.price;
+
+    return item;
   };
 }
