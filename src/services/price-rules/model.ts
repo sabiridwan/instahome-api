@@ -8,11 +8,11 @@ export enum PriceRuleTypes {
 export default class PriceRule {
   _id?: mongoose.Types.ObjectId;
   @prop({ required: true })
-  adsType: string;
+  adType: string;
   @prop({ required: true })
   customerId: string;
   @prop({})
-  name: string;
+  description: string;
   @prop({})
   buyQuantity: number;
   @prop({})

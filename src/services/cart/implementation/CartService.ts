@@ -1,5 +1,10 @@
 import { inject, injectable } from "inversify";
 import { adContainer, AdService, AD_TYPES } from "../../ads";
+import {
+  priceRuleContainer,
+  PriceRuleService,
+  PRICERULE_TYPES,
+} from "../../price-rules";
 import { CartRepository, TYPES } from "../interface";
 import { CartService } from "../interface/CartService";
 import Cart, { CartItem } from "../model";
@@ -10,13 +15,12 @@ export class CartServiceImpl implements CartService {
   private _adService: AdService = adContainer.get<AdService>(
     AD_TYPES.AdService
   );
+  private _priceRuleSvc: PriceRuleService = priceRuleContainer.get<PriceRuleService>(
+    PRICERULE_TYPES.PriceRuleService
+  );
 
-  constructor(
-    @inject(TYPES.CartRepository) accountRepo: CartRepository
-    // @inject(AD_TYPES.AdService) adSvc: AdService
-  ) {
+  constructor(@inject(TYPES.CartRepository) accountRepo: CartRepository) {
     this._repository = accountRepo;
-    // this._adService = adSvc;
   }
   createOrUpdateCart = async (model: Cart): Promise<Cart> => {
     const cart = await this.findOne({ id: model.id });
@@ -54,6 +58,13 @@ export class CartServiceImpl implements CartService {
     item: CartItem
   ): Promise<CartItem> => {
     const ad = await this._adService.findOne({ id: item.adType });
+
+    const priceRules = await this._priceRuleSvc.find({
+      adType: item.adType,
+      customerId,
+    });
+
+    console.log(priceRules);
 
     if (!ad) throw new Error("Ad not found");
 

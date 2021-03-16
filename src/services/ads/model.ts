@@ -11,6 +11,8 @@ export default class Ad {
   createdAt: number;
   @prop({})
   updatedAt: number;
+
+  customerId:string;
 }
 
 export const AdModel = getModelForClass(Ad);

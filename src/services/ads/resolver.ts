@@ -9,7 +9,7 @@ const seedAd = async (_, {}, context: Context) => {
 };
 
 const findAds = async (_, ad, context: Context) => {
-  return await _service.find(ad.ad);
+  return await _service.find({ ...ad.ad, customerId: context.customerId });
 };
 
 const resolvers = {

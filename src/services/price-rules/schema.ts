@@ -6,9 +6,9 @@ const typeDefs = gql`
 
   type PriceRule {
     _id: ID!
-    adsType: String!
+    adType: String!
     customerId: String!
-    name: String!
+    description: String!
     buyQuantity: Int!
     getQuantity: Int!
     percentage: Float!

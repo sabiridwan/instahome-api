@@ -10,8 +10,6 @@ const createOrUpdateCart = async (_, cart, context: Context) => {
     id: context.customerId,
   });
 
-  console.log(res.items,"i am here...");
-
   return res;
 };
 

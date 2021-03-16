@@ -39,3 +39,14 @@
 {"message":"\"Expected Iterable, but did not find one for field \\\"Cart.items\\\".\\n\\nGraphQL request:5:5\\n4 |     id\\n5 |     items{\\n  |     ^\\n6 |       _id@Internal server error..\"","level":"error"}
 {"message":"\"Expected Iterable, but did not find one for field \\\"Cart.items\\\".\\n\\nGraphQL request:5:5\\n4 |     id\\n5 |     items{\\n  |     ^\\n6 |       _id@Internal server error..\"","level":"error"}
 {"message":"\"Cannot return null for non-nullable field CartItem.quantity.\\n\\nGraphQL request:7:7\\n6 |       _id\\n7 |       quantity\\n  |       ^\\n8 |       adsType@Internal server error..\"","level":"error"}
+{"message":"\"Cannot query field \\\"name\\\" on type \\\"PriceRule\\\".\\n\\nGraphQL request:38:5\\n37 |     _id\\n38 |     name\\n   |     ^\\n39 |     adsType@Internal server error..\"","level":"error"}
+{"message":"\"Cannot query field \\\"adsType\\\" on type \\\"PriceRule\\\". Did you mean \\\"adType\\\" or \\\"type\\\"?\\n\\nGraphQL request:39:5\\n38 |     name\\n39 |     adsType\\n   |     ^\\n40 |     customerId@Internal server error..\"","level":"error"}
+{"message":"\"PriceRule validation failed: adType: Path `adType` is required.\\n\\nGraphQL request:32:3\\n31 | mutation SeedPricingRule{\\n32 |   seedPriceRule\\n   |   ^\\n33 | }@Internal server error..\"","level":"error"}
+{"message":"\"Cannot return null for non-nullable field Ad.id.\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot read property 'map' of undefined\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot read property 'map' of undefined\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot read property 'map' of undefined\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot return null for non-nullable field Ad.id.\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot return null for non-nullable field Ad.name.\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot return null for non-nullable field Ad.name.\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
+{"message":"\"Cannot query field \\\"name\\\" on type \\\"AdPriceRule\\\".\\n\\nGraphQL request:58:7\\n57 |     rules{\\n58 |       name\\n   |       ^\\n59 |     }@Internal server error..\"","level":"error"}

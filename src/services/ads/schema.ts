@@ -6,6 +6,12 @@ const typeDefs = gql`
     id: String!
     name: String!
     price: Float!
+    rules:[AdPriceRule]
+  }
+
+  type AdPriceRule{
+    description: String!
+    type: String!
   }
 
   input AdQueryInput {
