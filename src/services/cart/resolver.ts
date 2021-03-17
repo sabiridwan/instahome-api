@@ -14,7 +14,7 @@ const createOrUpdateCart = async (_, cart, context: Context) => {
 };
 
 const findCustomerCart = async (_, __, context: Context) => {
-  return await _service.find({ id: context.customerId } as any);
+  return await _service.findOne({ id: context.customerId } as any);
 };
 
 const resolvers = {

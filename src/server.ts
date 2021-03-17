@@ -31,6 +31,9 @@ const origins = {
   ],
 };
 
+
+console.log(origins[process.env.app_env]);
+
 const allowedOrigins = origins[process.env.app_env];
 const configurations = {
   production: {

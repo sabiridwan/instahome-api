@@ -50,3 +50,5 @@
 {"message":"\"Cannot return null for non-nullable field Ad.name.\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
 {"message":"\"Cannot return null for non-nullable field Ad.name.\\n\\nGraphQL request:53:3\\n52 | query FindAds{\\n53 |   findAds{\\n   |   ^\\n54 |     id@Internal server error..\"","level":"error"}
 {"message":"\"Cannot query field \\\"name\\\" on type \\\"AdPriceRule\\\".\\n\\nGraphQL request:58:7\\n57 |     rules{\\n58 |       name\\n   |       ^\\n59 |     }@Internal server error..\"","level":"error"}
+{"message":"\"Unknown type \\\"Material\\\".\\n\\nGraphQL request:8:22\\n7 |\\n8 | fragment AdDetail on Material {\\n  |                      ^\\n9 |   id@Internal server error..\"","level":"error"}
+{"message":"\"Unknown type \\\"Material\\\".\\n\\nGraphQL request:8:22\\n7 |\\n8 | fragment AdDetail on Material {\\n  |                      ^\\n9 |   id@Internal server error..\"","level":"error"}

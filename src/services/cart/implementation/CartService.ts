@@ -36,8 +36,8 @@ export class CartServiceImpl implements CartService {
       items.push(await this._adSummary(model.id, item));
     }
 
-    return { ...model, items, id: model.id };
-    // return await this._repository.create(model);
+    // return { ...model, items, id: model.id };
+    return await this._repository.create(model);
   };
 
   update = async (model: Cart): Promise<Cart> => {
@@ -59,12 +59,12 @@ export class CartServiceImpl implements CartService {
   ): Promise<CartItem> => {
     const ad = await this._adService.findOne({ id: item.adType });
 
-    const priceRules = await this._priceRuleSvc.find({
-      adType: item.adType,
-      customerId,
-    });
+    // const priceRules = await this._priceRuleSvc.find({
+    //   adType: item.adType,
+    //   customerId,
+    // });
 
-    console.log(priceRules);
+    // console.log(priceRules);
 
     if (!ad) throw new Error("Ad not found");
 

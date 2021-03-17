@@ -30,7 +30,7 @@ const typeDefs = gql`
 
   # ---------query
   type Query {
-    findCustomerCart: Cart!
+    findCustomerCart: Cart
   }
   # ---------------mutation
   type Mutation {

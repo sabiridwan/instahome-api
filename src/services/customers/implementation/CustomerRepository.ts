@@ -38,7 +38,7 @@ export class CustomerRepositoryImpl implements CustomerRepository {
       },
       {
         customerId: "singgroup",
-        name: "IGB Behard",
+        name: "Mah Sing Group",
         updatedAt: Date.now(),
         createdAt: Date.now(),
       },

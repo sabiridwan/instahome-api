@@ -5,12 +5,19 @@ import Cart, { CartModel } from "../model";
 @injectable()
 export class CartRepositoryImpl implements CartRepository {
   create = async (model: Cart): Promise<Cart> => {
-    return await CartModel.create(model);
+    return await CartModel.create({
+      ...model,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
   };
   update = async (model: Cart): Promise<boolean> => {
-    await CartModel.updateOne({id:model.id}, model);
+    await CartModel.updateOne(
+      { id: model.id },
+      { ...model, createdAt: Date.now(), updatedAt: Date.now() }
+    );
 
-     return true;
+    return true;
   };
   find = async (query: Partial<Cart>): Promise<Cart[]> => {
     return await CartModel.find(query);
