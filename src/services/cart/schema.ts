@@ -17,6 +17,19 @@ const typeDefs = gql`
     discountPrice: Float
     totalPrice: Float
     remark: String
+    ad: CartAd
+  }
+
+  type CartAd {
+    id: String!
+    name: String!
+    price: Float!
+    rules: [CartAdPriceRule]
+  }
+
+  type CartAdPriceRule {
+    description: String!
+    type: String!
   }
 
   input CartInput {

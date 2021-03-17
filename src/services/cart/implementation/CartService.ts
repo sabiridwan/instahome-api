@@ -46,11 +46,39 @@ export class CartServiceImpl implements CartService {
   };
 
   find = async (query: Partial<Cart>): Promise<Array<Cart>> => {
-    return await this._repository.find(query);
+    return await this._repository.find(query).then(async (res) => {
+      return await Promise.all(
+        res.map(async (rs) => {
+          return {
+            ...rs,
+            items: await this._mapItems(rs, query) as any
+          };
+        })
+      );
+    });
   };
 
   findOne = async (query: Partial<Cart>): Promise<Cart> => {
-    return await this._repository.findOne(query);
+    return await this._repository.findOne(query).then(async (rs: any) => {
+      return {
+        ...rs._doc,
+        items: await this._mapItems(rs, query),
+      };
+    });
+  };
+
+  _mapItems = async (rs, query) => {
+    return await Promise.all(
+      rs._doc.items.map(async (itm: any) => {
+        return {
+          ...itm._doc,
+          ad: await this._adService.findOne({
+            id: itm._doc.adType,
+            customerId: query.id,
+          }),
+        };
+      })
+    );
   };
 
   _adSummary = async (

@@ -20,31 +20,34 @@ export class AdServiceImpl implements AdService {
   }
 
   find = async (query: Partial<Ad>): Promise<Array<Ad>> => {
-
     const customerId = query.customerId;
     delete query.customerId;
-    return await this._repository.find(query).then(async (res:any) => {
-
-      console.log(res,query.customerId,"here...");
+    return await this._repository.find(query).then(async (res: any) => {
       return await Promise.all(
         res.map(async (rs) => {
-
-          if(!customerId) return rs;
-
-          return {
-            ...rs._doc,
-            rules: await this._priceRuleSvc.find({
-              customerId: customerId,
-              adType: rs.id,
-            }),
-          };
+          if (!customerId) return rs;
+          return await this._mapPriceRule(customerId, rs._doc);
         })
       );
     });
   };
 
   findOne = async (query: Partial<Ad>): Promise<Ad> => {
-    return await this._repository.findOne(query);
+    const customerId = query.customerId;
+    delete query.customerId;
+    return await this._repository
+      .findOne(query)
+      .then(async (rs: any) => await this._mapPriceRule(customerId, rs._doc));
+  };
+
+  _mapPriceRule = async (customerId: string, ad: Ad) => {
+    return {
+      ...ad,
+      rules: await this._priceRuleSvc.find({
+        customerId: customerId,
+        adType: ad.id,
+      }),
+    };
   };
 
   seed = async (): Promise<boolean> => {

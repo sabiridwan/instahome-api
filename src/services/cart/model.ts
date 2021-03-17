@@ -28,6 +28,7 @@ export default class Cart {
 
   totalDiscountPrice: number;
   totalOriginalPrice: number;
+  customerId: string;
 }
 
 export const CartModel = getModelForClass(Cart);
