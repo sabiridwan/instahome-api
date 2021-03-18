@@ -11,6 +11,10 @@ export class CustomerServiceImpl implements CustomerService {
     this._repository = accountRepo;
   }
 
+  find = async (query: Partial<Customer>): Promise<Customer[]> => {
+    return await this._repository.find(query);
+  };
+
   findOne = async (query: Partial<Customer>): Promise<Customer> => {
     return await this._repository.findOne(query);
   };

@@ -6,6 +6,7 @@ const typeDefs = gql`
 
   type Customer {
     _id: ID!
+    id: String!
     customerId: String!
     name: String!
     createdAt: Long
@@ -18,6 +19,7 @@ const typeDefs = gql`
 
   # ---------query
   type Query {
+    findCustomers: [Customer]
     findCustomer(customer: CustomerQueryInput): Customer!
   }
   # ---------------mutation

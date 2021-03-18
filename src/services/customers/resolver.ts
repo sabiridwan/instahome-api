@@ -13,10 +13,15 @@ const findCustomer = async (_, customer, context: Context) => {
   return await _service.findOne(customer.customer);
 };
 
+const findCustomers = async (_, __, context: Context) => {
+  return await _service.find({});
+};
+
 const resolvers = {
   Long: LongResolver,
   Query: {
     findCustomer,
+    findCustomers
   },
   Mutation: {
     seedCustomer,

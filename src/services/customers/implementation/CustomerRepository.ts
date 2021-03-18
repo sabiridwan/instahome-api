@@ -4,9 +4,10 @@ import Customer, { CustomerModel } from "../model";
 
 @injectable()
 export class CustomerRepositoryImpl implements CustomerRepository {
+  find = async (query: Partial<Customer>) => {
+    return await CustomerModel.find(query);
+  };
   findOne = async (query: Partial<Customer>) => {
-
-    console.log(query);
     return await CustomerModel.findOne(query);
   };
 
