@@ -15,6 +15,17 @@ import path from "path";
 import { environment } from "./environment";
 import { logger } from "./helper";
 import schema from "./schema";
+import { adContainer, AdService, AD_TYPES } from "./services/ads";
+import {
+  customerContainer,
+  CustomerService,
+  CUSTOMER_TYPES,
+} from "./services/customers";
+import {
+  priceRuleContainer,
+  PriceRuleService,
+  PRICERULE_TYPES,
+} from "./services/price-rules";
 const morgan = require("morgan");
 
 dotenv.config();
@@ -30,9 +41,6 @@ const origins = {
     "https://stage_admin.order-please.com",
   ],
 };
-
-
-console.log(origins[process.env.app_env]);
 
 const allowedOrigins = origins[process.env.app_env];
 const configurations = {
@@ -68,6 +76,14 @@ setGlobalOptions({
   },
 });
 
+const adSvc = adContainer.get<AdService>(AD_TYPES.AdService);
+const customerSvc = customerContainer.get<CustomerService>(
+  CUSTOMER_TYPES.CustomerService
+);
+const ruleSvc = priceRuleContainer.get<PriceRuleService>(
+  PRICERULE_TYPES.PriceRuleService
+);
+
 (async () => {
   await connect(environment.mongoDb.uri, {
     useNewUrlParser: true,
@@ -78,6 +94,13 @@ setGlobalOptions({
       console.log(
         `Mongo db connection ${environment.mongoDb.uri} successfl....`
       );
+
+      // seed db
+      const ads = await adSvc.find({});
+      if (!(ads && ads.length > 0)) {
+        await Promise.all([adSvc.seed(), ruleSvc.seed(), customerSvc.seed()]);
+      }
+
       return res;
     })
     .catch((err) => {

@@ -12,10 +12,11 @@ export class CartRepositoryImpl implements CartRepository {
     });
   };
   update = async (id: string, model: Cart): Promise<boolean> => {
-    delete model.id;
+    const md = { ...model };
+    delete md.id;
     await CartModel.updateOne(
       { id },
-      { ...model, createdAt: Date.now(), updatedAt: Date.now() }
+      { ...md, createdAt: Date.now(), updatedAt: Date.now() }
     );
 
     return true;

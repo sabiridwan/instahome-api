@@ -2,7 +2,7 @@ import { getModelForClass, prop, mongoose } from "@typegoose/typegoose";
 
 export default class Customer {
   _id?: mongoose.Types.ObjectId;
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   customerId: string;
   @prop({})
   name: string;

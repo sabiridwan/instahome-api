@@ -16,7 +16,7 @@ export default class PriceRule {
   @prop({})
   buyQuantity: number;
   @prop({})
-  getQuantity: number;
+  freeQuantity: number;
   @prop({})
   percentage: number;
   @prop({ type: () => String, required: true, enum: PriceRuleTypes })

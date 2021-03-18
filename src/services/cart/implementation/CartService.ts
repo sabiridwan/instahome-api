@@ -1,10 +1,12 @@
 import { inject, injectable } from "inversify";
+import helper from "../../../helper";
 import { adContainer, AdService, AD_TYPES } from "../../ads";
 import {
   priceRuleContainer,
   PriceRuleService,
   PRICERULE_TYPES,
 } from "../../price-rules";
+import { PriceRuleTypes } from "../../price-rules/model";
 import { CartRepository, TYPES } from "../interface";
 import { CartService } from "../interface/CartService";
 import Cart, { CartItem } from "../model";
@@ -28,9 +30,7 @@ export class CartServiceImpl implements CartService {
     let items = [];
     if (cart) {
       items = [...cart.items];
-
       const indx = items.findIndex((itm) => itm.adType == model.adType);
-
       if (indx >= 0) items[indx].quantity += model.quantity;
       else items.push(await this._adSummary(model.customerId, model));
     } else {
@@ -52,7 +52,7 @@ export class CartServiceImpl implements CartService {
   };
 
   updateCart = async (model: Cart): Promise<Cart> => {
-    await this._repository.update(model.customerId, model);
+    await this._repository.update(model.id, model);
     return await this.findOne({ id: model.id });
   };
 
@@ -61,9 +61,6 @@ export class CartServiceImpl implements CartService {
       return await Promise.all(
         res.map(async (rs: any) => {
           const cart = rs && rs._doc ? rs._doc : rs;
-
-          console.log(cart, "here...");
-
           if (!cart) return null;
           return {
             ...cart,
@@ -78,9 +75,24 @@ export class CartServiceImpl implements CartService {
     return await this._repository.findOne(query).then(async (rs: any) => {
       const cart = rs && rs._doc ? rs._doc : rs;
       if (!cart) return null;
+      const itms = await this._mapItems(cart, query);
       return {
         ...cart,
-        items: await this._mapItems(cart, query),
+        items: itms,
+        totalOriginalPrice: helper.raoundToTwo(
+          itms && itms.length > 0
+            ? itms
+                .map((itm: CartItem) => itm.originalPrice)
+                .reduce((a, b) => a + b) || 0
+            : 0
+        ),
+        totalDiscountPrice: helper.raoundToTwo(
+          itms && itms.length > 0
+            ? itms
+                .map((itm: CartItem) => itm.discountPrice)
+                .reduce((a, b) => a + b) || 0
+            : 0
+        ),
       };
     });
   };
@@ -88,13 +100,13 @@ export class CartServiceImpl implements CartService {
   _mapItems = async (rs, query) => {
     return await Promise.all(
       rs.items.map(async (itm: any) => {
-        return {
+        return await this._adSummary(query.id, {
           ...itm._doc,
           ad: await this._adService.findOne({
             id: itm.adType,
             customerId: query.id,
           }),
-        };
+        });
       })
     );
   };
@@ -105,16 +117,37 @@ export class CartServiceImpl implements CartService {
   ): Promise<CartItem> => {
     const ad = await this._adService.findOne({ id: item.adType });
 
-    // const priceRules = await this._priceRuleSvc.find({
-    //   adType: item.adType,
-    //   customerId,
-    // });
-
-    // console.log(priceRules);
-
     if (!ad) throw new Error("Ad not found");
 
+    const rule = await this._priceRuleSvc.findOne({
+      adType: item.adType,
+      customerId,
+    });
+
     item.originalPrice = item.quantity * ad.price;
+    if (rule && rule.type) {
+      console.log(rule, "RULE TYPE..");
+      switch (rule.type) {
+        case PriceRuleTypes.Quantity:
+          const free = item.quantity / rule.buyQuantity;
+          item.discountPrice = (item.quantity - free) * ad.price;
+          item.originalPrice = item.discountPrice;
+          break;
+
+        case PriceRuleTypes.Percentage:
+          if (item.quantity >= rule.buyQuantity) {
+            const price = item.quantity * ad.price;
+            const pct = price * (rule.percentage / 100);
+            item.discountPrice = price - pct;
+            item.originalPrice = item.discountPrice;
+          }
+
+          break;
+
+        default:
+          break;
+      }
+    }
 
     return item;
   };
