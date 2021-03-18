@@ -11,19 +11,20 @@ export class CartRepositoryImpl implements CartRepository {
       updatedAt: Date.now(),
     });
   };
-  update = async (model: Cart): Promise<boolean> => {
+  update = async (id: string, model: Cart): Promise<boolean> => {
+    delete model.id;
     await CartModel.updateOne(
-      { id: model.id },
+      { id },
       { ...model, createdAt: Date.now(), updatedAt: Date.now() }
     );
 
     return true;
   };
   find = async (query: Partial<Cart>): Promise<Cart[]> => {
-    return await CartModel.find(query);
+    return await CartModel.find(query).exec();
   };
 
   findOne = async (query: Partial<Cart>) => {
-    return await CartModel.findOne(query);
+    return await CartModel.findOne(query).exec();
   };
 }

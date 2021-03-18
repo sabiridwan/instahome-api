@@ -47,7 +47,8 @@ const typeDefs = gql`
   }
   # ---------------mutation
   type Mutation {
-    createOrUpdateCart(cart: CartInput!): Cart
+    addToCart(item: CartItemInput!): Cart
+    updateCart(cart: CartInput!): Cart
   }
 `;
 

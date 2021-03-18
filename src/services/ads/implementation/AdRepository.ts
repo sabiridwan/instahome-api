@@ -7,7 +7,7 @@ export class AdRepositoryImpl implements AdRepository {
   find = async (query: Partial<Ad>): Promise<Ad[]> => {
     return await AdModel.find(query);
   };
-  
+
   findOne = async (query: Partial<Ad>) => {
     return await AdModel.findOne(query);
   };
@@ -15,25 +15,25 @@ export class AdRepositoryImpl implements AdRepository {
   seed = async () => {
     await AdModel.create([
       {
-        id:"standard",
+        id: "standard",
         name: "Standard Ad",
         price: 269.99,
         createdAt: Date.now(),
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
       },
       {
-        id:"featured",
+        id: "featured",
         name: "Featured Ad",
         price: 322.99,
         createdAt: Date.now(),
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
       },
       {
-        id:"premium",
+        id: "premium",
         name: "Premium Ad",
         price: 394.99,
         createdAt: Date.now(),
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
       },
     ] as Array<Ad>);
 

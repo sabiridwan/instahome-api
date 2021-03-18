@@ -26,7 +26,8 @@ export class AdServiceImpl implements AdService {
       return await Promise.all(
         res.map(async (rs) => {
           if (!customerId) return rs;
-          return await this._mapPriceRule(customerId, rs._doc);
+          const ad = rs && rs._doc ? rs._doc : rs;
+          return await this._mapPriceRule(customerId, ad);
         })
       );
     });
@@ -35,9 +36,10 @@ export class AdServiceImpl implements AdService {
   findOne = async (query: Partial<Ad>): Promise<Ad> => {
     const customerId = query.customerId;
     delete query.customerId;
-    return await this._repository
-      .findOne(query)
-      .then(async (rs: any) => await this._mapPriceRule(customerId, rs._doc));
+    return await this._repository.findOne(query).then(async (rs: any) => {
+      const ad = rs && rs._doc ? rs._doc : rs;
+      return await this._mapPriceRule(customerId, ad);
+    });
   };
 
   _mapPriceRule = async (customerId: string, ad: Ad) => {

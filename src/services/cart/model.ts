@@ -14,6 +14,8 @@ export class CartItem {
   totalPrice: number;
   @prop({})
   remark: String;
+
+  customerId: string;
 }
 
 export default class Cart {
